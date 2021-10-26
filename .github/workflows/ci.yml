@@ -18,8 +18,8 @@ jobs:
             matrix:
                 # if you change one of these, be sure to update
                 # /tox.ini:[gh-actions] as well
-                # python-version: [pypy-3.7, 3.7, 3.8, 3.9]
-                python-version: [3.9]
+                python-version: [pypy-3.7, 3.7, 3.8, 3.9]
+                # python-version: [3.9]
         steps:
             - uses: actions/checkout@v2
             - name: Set up python ${{ matrix.python-version }}
@@ -34,7 +34,8 @@ jobs:
                   imagemagick libpulse-dev lm-sensors git xserver-xephyr xterm xvfb ninja-build libegl1-mesa-dev \
                   libgles2-mesa-dev libgbm-dev libinput-dev libxkbcommon-dev libpixman-1-dev libpciaccess-dev \
                   dbus-x11 libnotify-bin
-                sudo pip -q install tox tox-gh-actions meson PyGObject
+                sudo pip -q install meson PyGObject
+                pip -q install "tox<4" tox-gh-actions 
             - name: Build wayland
               run: |
                 wget -q --no-check-certificate https://wayland.freedesktop.org/releases/wayland-$WAYLAND.tar.xz
@@ -83,7 +84,6 @@ jobs:
             #     git clone git://github.com/qtile/qtile.git
             #     cd qtile
             #     pip install .
-            - name: run tests
+            - name: Run test suite
               run: |
-                # [ "$(grep -c -P '\t' CHANGELOG)" = "0" ]
-                tox -e py39,pep8,docs
+                tox
